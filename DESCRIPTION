@@ -1,0 +1,9 @@
+Package: cts
+Title: Continuous Time Autoregressive Models
+Version: 1.0-23
+Date: 2019-11-07
+Author: Fortran original by G. Tunnicliffe-Wilson and Zhu Wang with contribution from John Nash, Cleve Moler and Jack Dongarra on Netlib and NAG, R port by Zhu Wang 
+Description: Functions to fit continuous time autoregressive models with the Kalman filter (Wang (2013) <doi:10.18637/jss.v053.i05>).
+Maintainer: Zhu Wang <wangz1@uthscsa.edu>
+License: GPL (>=2)
+Packaged: 2014-02-26 14:51:13 UTC; zhu
