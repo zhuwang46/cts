@@ -31,8 +31,8 @@ library(cts)
 #>     spectrum, tsdiag
 ## basic example code
 data(V22174)
- fit <- car(V22174,scale=0.2,order=7, ctrl=car_control(trace=FALSE))
- summary(fit)
+fit <- car(V22174,scale=0.2,order=7, ctrl=car_control(trace=FALSE))
+summary(fit)
 #> 
 #> Call:
 #> car(x = V22174, scale = 0.2, order = 7, ctrl = car_control(trace = FALSE))
@@ -47,19 +47,7 @@ data(V22174)
 #> Estimated mean (standard error):
 #> [1] 0.173
 #> [1] 0.022
- spectrum(fit)
-```
-
-<img src="man/figures/README-example-1.png" width="100%" />
-
-``` r
- tsdiag(fit)
-```
-
-<img src="man/figures/README-example-2.png" width="100%" />
-
-``` r
- AIC(fit)
+AIC(fit)
 #> 
 #> Call:
 #> car(x = V22174, scale = 0.2, order = 7, ctrl = car_control(trace = FALSE))
@@ -74,7 +62,7 @@ data(V22174)
 #>      5        6.11  -86.05
 #>      6       -0.76  -84.63
 #>      7        4.32 -101.27
- factab(fit)
+factab(fit)
 #> 
 #> Call:
 #> factab(object = fit)
@@ -90,26 +78,4 @@ data(V22174)
 #> 
 #>     1      2      3      4      5      6      7  
 #> 0.009  0.009  0.048  0.048  0.022  0.022  0.000
- ###fitted values vs observed values
- ntim <- dim(V22174)[1]
- plot(V22174[,1], V22174[,2], type="l")
- points(V22174[,1], fit$pre2[1:ntim], col="red")
-```
-
-<img src="man/figures/README-example-3.png" width="100%" />
-
-``` r
- ### alternatively
- fit2 <- car(V22174,scale=0.2,order=7, ctrl=car_control(fty=3))
- plot(V22174[,1], V22174[,2], type="l")
- points(V22174[,1], fit2$pre2, col="red")
-```
-
-<img src="man/figures/README-example-4.png" width="100%" />
-
-``` r
- 
- data(asth)
- fit <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
- kalsmo(fit)
 ```
