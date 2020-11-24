@@ -202,19 +202,70 @@ x_{k}=G\psi(t_{k})+\eta_{k}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(G=HU\)</span>. The necessary and sufficient condition for the diagonalization of <span class="math inline">\(A\)</span> is that <span class="math inline">\(A\)</span> has distinct eigenvalues. The diagonal form not only provides computational efficiency, but also provides an interpretation of unobserved components. The evaluation of <span class="math inline">\(T_{\theta,k}=e^{A\delta_k}\)</span> (standard form) is required where <span class="math inline">\(\delta_k=t_k-t_{k-1}\)</span>. For a review of computations related to the exponential of a matrix, see <span class="citation">Moler and Loan (<a href="#ref-Mole:Loan:2003">2003</a>)</span>. For the diagonal form, <span class="math inline">\(T_{\psi,k}=e^{\mathbf{D}\delta_k}\)</span> is diagonal with elements <span class="math inline">\(e^{r_i\delta_k}\)</span>. When a diagonal form is not available, a numerical matrix exponential evaluation is needed.</p>
 To start the Kalman filter recursions, initial conditions are in demand. For a stationary model, the unconditional covariance matrix of state vector <span class="math inline">\(\theta(t)\)</span> is known <span class="citation">(Doob <a href="#ref-Doob:1953">1953</a>)</span> and used in <span class="citation">Jones (<a href="#ref-Jone:1981">1981</a>)</span> and <span class="citation">Harvey (<a href="#ref-Harv:1990">1990</a>)</span> 9.1. The initial state for both standard and diagonalized version can be set as <span class="math inline">\(\theta_0=0\)</span> and <span class="math inline">\(\psi_0=0\)</span>, respectively. The stationary covariance matrix <span class="math inline">\(Q\)</span> satisfies
-<span class="math display">\[\begin{equation}{E:Q}
+<span class="math display" id="eq:Q">\[\begin{equation}
 Q=\sigma^2\int_{0}^{\infty}e^{As}RR^\top e^{A^\top s}ds.
+\tag{12}
 \end{equation}\]</span>
 When <span class="math inline">\(A\)</span> can be diagonalized, it is straightforward to show that
 <span class="math display" id="eq:Qini">\[\begin{equation}
 Q_{\psi_{i,j}}=-\sigma^2J_i \bar{J_j}/(r_i+\bar{r}_j),
-\tag{12}
+\tag{13}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(\bar{J_j}\)</span> and <span class="math inline">\(\bar{r}_j\)</span> are complex conjugates of <span class="math inline">\(J_j\)</span> and <span class="math inline">\(r_j\)</span>, respectively.</p>
-The scale parameter <span class="math inline">\(\kappa\)</span> can be chosen approximately as the reciprocal of the mean time between observations. The algorithm of Kalman filter for the diagonal form is presented below. Starting with an initial stationary state vector of <span class="math inline">\(\psi_0=\psi(0|0)=0\)</span> and the initial stationary state covariance matrix <span class="math inline">\(Q_{\psi}\)</span> <a href="#eq:Qini">(12)</a>, the recursion proceeds as follows:
-
-<p>When a diagonal form is not stable, a standard form Kalman filter recursion may be found in <span class="citation">Belcher, Hampton, and Tunnicliffe Wilson (<a href="#ref-Belc:Hamp:Tunn:1994">1994</a>)</span> or <span class="citation">Wang (<a href="#ref-Wang:2004">2004</a>)</span>. However, the computational load is reduced dramatically with the diagonal form since matrix <span class="math inline">\(\mathbf{D}\)</span> is diagonal.</p>
-<p>When the nonlinear optimization is successfully completed, in addition to the maximum likelihood estimation of the parameters and error variances, the Kalman filter returns the optimal estimate of the state and the state covariance matrix at the last time point. The forecasting of the state, state covariance matrix and observation can be continued into future desired time points using equations from <a href="#eq:carkal1d">(<strong>??</strong>)</a> to <a href="#eq:carkal4d">(<strong>??</strong>)</a>.</p>
+<p>The scale parameter <span class="math inline">\(\kappa\)</span> can be chosen approximately as the reciprocal of the mean time between observations. The algorithm of Kalman filter for the diagonal form is presented below. Starting with an initial stationary state vector of <span class="math inline">\(\psi_0=\psi(0|0)=0\)</span> and the initial stationary state covariance matrix <span class="math inline">\(Q_{\psi}\)</span> <a href="#eq:Qini">(13)</a>, the recursion proceeds as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Predict the state. Let
+<span class="math display" id="eq:carkal1d">\[\begin{equation}
+T_{\psi,k}=e^{\mathbf{D}\delta_k}
+\tag{14}
+\end{equation}\]</span>
+a diagonal matrix, then
+<span class="math display">\[\begin{equation}
+\psi(t_k|t_{k-1})=T_{\psi,k}\psi(t_{k-1}|t_{k-1}).
+\end{equation}\]</span>
+</li>
+<li>Calculate the covariance matrix of this prediction:<br><span class="math display">\[\begin{align}
+P_\psi(t_k|t_{k-1}) %&amp;=T_{\psi,k}P_\psi(t_{k-1}|t_{k-1})\bar{T}_{\psi,k}+Q_\psi(t_k|t_{k-1}) \notag\\
+=&amp;T_{\psi,k}(P_\psi(t_{k-1}|t_{k-1})-Q_\psi)\bar{T}_{\psi,k} +Q_\psi.
+\end{align}\]</span>
+</li>
+<li>Predict the observation at time <span class="math inline">\(t_k\)</span>:
+<span class="math display" id="eq:carkal4d">\[\begin{equation}
+x_\psi(t_k|t_{k-1})=G\psi(t_k|t_{k-1})
+\tag{15}
+\end{equation}\]</span>
+</li>
+<li>Calculate the innovation:
+<span class="math display">\[\begin{equation}
+v_\psi(t_k)=x_\psi(t_k)-x_\psi(t_k|t_{k-1})
+\end{equation}\]</span>
+and variance
+<span class="math display">\[\begin{equation}
+F_\psi(t_k)=GP_\psi(t_k|t_{k-1})\bar{G}^\top+V
+\end{equation}\]</span>
+</li>
+<li>Update the estimate of the state vector:
+<span class="math display">\[\begin{equation}
+\psi(t_k|t_k)=\psi(t_k|t_{k-1})+P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)v_\psi(t_k)
+\end{equation}\]</span>
+</li>
+<li>Update the covariance matrix:
+<span class="math display">\[\begin{equation}
+P_\psi(t_k|t_k)=P_\psi(t_k|t_{k-1})-P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)G\bar{P}^\top _\psi(t_k|t_{k-1})
+\end{equation}\]</span>
+</li>
+<li>The unknown scale factor <span class="math inline">\(\sigma^2\)</span> can be concentrated out by letting <span class="math inline">\(\sigma^2=1\)</span> temporally. -2 log-likelihood is calculated by
+<span class="math display" id="eq:loglikecd">\[\begin{equation}
+\log L_{\psi,c}=\sum_{t=1}^{n}\log F_\psi(t_k)+n\log \sum_{t=1}^{n}v_\psi^2(t_k)/F_\psi(t_k)
+\tag{16}
+\end{equation}\]</span>
+The log-likelihood function <a href="#eq:loglikecd">(16)</a> thus can be evaluated by a recursive application of the Kalman filter, and a nonlinear numerical optimization routine is then used to determine the parameter estimation. The unknown scale factor can then be estimated by
+<span class="math display">\[\begin{equation}
+\hat{\sigma}^2=\frac{1}{n}\sum_{t=1}^{n}v_\psi^2(t_k)/F_\psi(t_k).
+\end{equation}\]</span>
+When a diagonal form is not stable, a standard form Kalman filter recursion may be found in <span class="citation">Belcher, Hampton, and Tunnicliffe Wilson (<a href="#ref-Belc:Hamp:Tunn:1994">1994</a>)</span> or <span class="citation">Wang (<a href="#ref-Wang:2004">2004</a>)</span>. However, the computational load is reduced dramatically with the diagonal form since matrix <span class="math inline">\(\mathbf{D}\)</span> is diagonal.</li>
+</ol>
+<p>When the nonlinear optimization is successfully completed, in addition to the maximum likelihood estimation of the parameters and error variances, the Kalman filter returns the optimal estimate of the state and the state covariance matrix at the last time point. The forecasting of the state, state covariance matrix and observation can be continued into future desired time points using equations from <a href="#eq:carkal1d">(14)</a> to <a href="#eq:carkal4d">(15)</a>.</p>
 </div>
 <div id="S:caraic" class="section level3">
 <h3 class="hasAnchor">
