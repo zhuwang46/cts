@@ -1,14 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-cts
-===
+# cts
 
 <!-- badges: start -->
 <!-- badges: end -->
-The goal of cts is to fit continuous time autoregressive models with the Kalman filter. See Wang (2013) <doi:10.18637/jss.v053.i05>.
+The goal of cts is to fit continuous time autoregressive models with the Kalman filter. See Wang (2013) <https://www.jstatsoft.org/article/view/v053i05>.
 
-Installation
-------------
+## Installation
 
 You can install the development version of cts from [GitHub](https://github.com/) with:
 
@@ -17,8 +15,7 @@ You can install the development version of cts from [GitHub](https://github.com/
 devtools::install_github("zhuwang46/cts")
 ```
 
-Example
--------
+## Example
 
 This is a basic example which shows you how to solve a common problem:
 
